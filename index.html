@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Laundry Queue Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1>LaundryCare</h1>
+                <p>Laundry Queue Management System</p>
+            </div>
+
+            <span class="system-status">System Online</span>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome">
+            <h2>Welcome to LaundryCare</h2>
+            <p>
+                Register customer orders, manage the waiting queue,
+                and keep track of completed laundry services.
+            </p>
+        </section>
+
+        <!-- Statistics -->
+        <section class="statistics">
+
+            <div class="stat-card">
+                <span>Total Orders</span>
+                <h2 id="totalOrders">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>Waiting Orders</span>
+                <h2 id="waitingOrders">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>Completed Orders</span>
+                <h2 id="completedOrders">0</h2>
+            </div>
+
+        </section>
+
+        <!-- Notification -->
+        <div id="notification" class="notification" role="status"
+             aria-live="polite" hidden></div>
+
+        <!-- Register Order -->
+        <section class="panel">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Register a New Order</h2>
+                    <p>Enter the customer's laundry details below.</p>
+                </div>
+            </div>
+
+            <form id="orderForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="customerName">Customer Name *</label>
+
+                        <input
+                            type="text"
+                            id="customerName"
+                            placeholder="Enter customer's full name"
+                            required
+                            maxlength="100"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter phone number"
+                            maxlength="25"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceType">Laundry Service *</label>
+
+                        <select id="serviceType" required>
+                            <option value="">Select a service</option>
+                            <option value="Washing">Washing</option>
+                            <option value="Dry Cleaning">Dry Cleaning</option>
+                            <option value="Ironing">Ironing</option>
+                            <option value="Washing and Ironing">
+                                Washing and Ironing
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemCount">Number of Items *</label>
+
+                        <input
+                            type="number"
+                            id="itemCount"
+                            min="1"
+                            max="500"
+                            step="1"
+                            placeholder="e.g. 5"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collectionDate">
+                            Expected Collection Date *
+                        </label>
+
+                        <input
+                            type="date"
+                            id="collectionDate"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+
+                        <input
+                            type="text"
+                            id="notes"
+                            placeholder="Optional instructions"
+                            maxlength="250"
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" class="primary-button">
+                    + Add Order to Queue
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- Waiting Queue -->
+        <section class="panel">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Waiting Queue</h2>
+                    <p>
+                        Orders are processed in the order they are received.
+                    </p>
+                </div>
+
+                <span class="count-badge" id="queueCount">0 orders</span>
+            </div>
+
+            <div id="queueList" class="queue-list"></div>
+
+            <div class="process-area">
+                <div>
+                    <strong>Next order to process</strong>
+                    <p id="nextOrderText">No orders are waiting.</p>
+                </div>
+
+                <button
+                    type="button"
+                    id="processButton"
+                    class="success-button"
+                    disabled
+                >
+                    Process Next Order
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Completed Orders -->
+        <section class="panel">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Completed Orders</h2>
+                    <p>Orders that have been processed.</p>
+                </div>
+
+                <button
+                    type="button"
+                    id="clearHistoryButton"
+                    class="danger-button"
+                >
+                    Clear History
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Items</th>
+                            <th>Collection Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="completedTable"></tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+        <section class="explanation">
+            <h3>How the Queue Works</h3>
+
+            <p>
+                This application uses the First In, First Out (FIFO)
+                principle. The first customer whose order is registered
+                is the first customer whose order is processed.
+            </p>
+
+            <p>
+                <strong>Enqueue:</strong> Adding a new order to the waiting
+                queue.
+            </p>
+
+            <p>
+                <strong>Dequeue:</strong> Removing the first waiting order
+                for processing.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>LaundryCare &copy; 2026 | Laundry Queue Management System</p>
+    </footer>
+
+</body>
+</html>
